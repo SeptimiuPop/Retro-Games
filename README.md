@@ -9,9 +9,9 @@ A standalone application to exploring how different forces can affect an object.
 The software requirements to run must be the following :
 
 - Linux OS 
-- C++ 11 or above
-- SFML library installed
-
+- Python3
+- Pygame
+- Pytorch
 
 ## Setup work
 
