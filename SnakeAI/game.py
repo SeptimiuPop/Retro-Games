@@ -4,7 +4,7 @@ from enum import Enum
 from collections import namedtuple
 
 pygame.init()
-font = pygame.font.Font('../Assets/arial.ttf', 25)
+font = pygame.font.Font('./Assets/arial.ttf', 25)
 #font = pygame.font.SysFont('arial', 25)
 
 class Direction(Enum):
@@ -25,7 +25,7 @@ BLACK = (0,0,0)
 BLOCK_SIZE = 20
 SPEED = 20
 
-class SnakeGame:
+class Game:
     
     def __init__(self, w=640, h=480):
         self.w = w
@@ -54,7 +54,7 @@ class SnakeGame:
         if self.food in self.snake:
             self._place_food()
         
-    def play_step(self):
+    def playStep(self):
         # 1. collect user input
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -78,7 +78,7 @@ class SnakeGame:
         game_over = False
         if self._is_collision():
             game_over = True
-            return game_over, self.score
+            return game_over
             
         # 4. place new food or just move
         if self.head == self.food:
@@ -91,7 +91,7 @@ class SnakeGame:
         self._update_ui()
         self.clock.tick(SPEED)
         # 6. return game over and score
-        return game_over, self.score
+        return game_over
     
     def _is_collision(self):
         # hits boundary
@@ -144,4 +144,3 @@ if __name__ == '__main__':
     print('Final Score', score)
         
         
-    pygame.quit()
