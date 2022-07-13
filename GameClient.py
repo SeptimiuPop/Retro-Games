@@ -1,5 +1,6 @@
 import Snake.game as snake
 import SnakeAI.game as snakeAI
+import Tetris.game as tetris
 
 class GameClient():
     def __init__(self) -> None:
@@ -7,8 +8,8 @@ class GameClient():
 
 if __name__ == '__main__':
     game_over = False
-    g = snake.Game()
+    g = tetris.Game()
     while game_over == False:
         game_over = g.playStep()
-    snake.pygame.quit()
+    tetris.pygame.quit()
     
