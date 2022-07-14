@@ -38,11 +38,14 @@ class Game:
         self.w = width
         self.h = height
 
+        self.board_h = int(self.h/BLOCK_SIZE)
+        self.board_w = int(self.w/BLOCK_SIZE)
+
         self.descend_clock = 0
         self.is_descending = False
         
         self.placed_blocks = {}
-        for i in range(int(self.h/BLOCK_SIZE)):
+        for i in range(self.board_h):
             self.placed_blocks[i] = []
 
         self._gen_shape()
@@ -71,18 +74,17 @@ class Game:
             pygame.draw.rect(self.window, COLOR_RED,(point.x, point.y, BLOCK_SIZE, BLOCK_SIZE))
             pygame.draw.rect(self.window, COLOR_GREEN,(point.x+3, point.y+3, BLOCK_SIZE-6, BLOCK_SIZE-6))
 
-        for i in range(int(self.h/BLOCK_SIZE)):
+        for i in range(self.board_h):
             for point in self.placed_blocks[i]:
                 pygame.draw.rect(self.window, COLOR_RED,(point.x, point.y, BLOCK_SIZE, BLOCK_SIZE))
                 pygame.draw.rect(self.window, COLOR_GREEN,(point.x+3, point.y+3, BLOCK_SIZE-6, BLOCK_SIZE-6))
-
-
 
         # text = font.render("Score: " + str(0), True, (255,255,255))
         # self.window.blit(text, [0, 0])
         
         pygame.display.update()
-    
+
+
     def _handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -160,23 +162,21 @@ class Game:
                     index = int(shape.y / BLOCK_SIZE)
                     self.placed_blocks[index].append(shape)
                 self._gen_shape()
-                self.clear_placed_line()
+                self._clear_placed_line()
                 return True
         
         return False
 
-    # should think of a way to append the shapes 
-    # in something like a dictionary and then 
-    # check if the entries match the screen width 
-    def clear_placed_line(self):
-        
-        for i in range(int(self.h/BLOCK_SIZE)):
-            ln = len(self.placed_blocks[i])
-            print (i,ln)
-            print (self.placed_blocks[i])
-            if len(self.placed_blocks[i]) >= 10:
-                for j in range(i,1,-1):
-                    self.placed_blocks[j] = self.placed_blocks[j-1]
-                    for r in range(len(self.placed_blocks[j])):
-                        tmp = self.placed_blocks[j][r]
-                        self.placed_blocks[j][r] = Point(tmp.x, tmp.y + BLOCK_SIZE)
+
+    def _clear_placed_line(self):   
+        ind = []
+        for i in range(self.board_h):
+            if len(self.placed_blocks[i]) >= self.board_w:
+                ind.append(i)
+
+        for i in ind:
+            for j in range(i,0,-1):
+                tmp = []
+                for block in self.placed_blocks[j-1]:
+                    tmp.append(Point(block.x, block.y + BLOCK_SIZE))
+                self.placed_blocks[j] = tmp
