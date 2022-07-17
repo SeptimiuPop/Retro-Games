@@ -72,6 +72,9 @@ class Game:
             self.speed_clock = 0
             self.BLOCK_SPEED -= 1
 
+        if self.GAME_OVER:
+            pygame.quit()
+
         return self.GAME_OVER
 
 

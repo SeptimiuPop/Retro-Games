@@ -28,4 +28,5 @@ From the terminal use the following command to launch the application :
 
 ` python3 GameClient.py `  
 
-In order to select the desired game change the GameClient file
+ 
+After starting the application you will be prompted with a message asking to select a game. Write down the number of the game and press enter
