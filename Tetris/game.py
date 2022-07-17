@@ -10,7 +10,6 @@ font = pygame.font.Font('./Assets/arial.ttf', 25)
 Point = namedtuple('Point', 'x, y')
 
 CLOCK_SPEED = 30
-BLOCK_SPEED = 5
 BLOCK_SIZE = 20
 
 
@@ -34,7 +33,9 @@ class Game:
         self.window = pygame.display.set_mode((width,height))
         self.clock = pygame.time.Clock()
 
+        self.BLOCK_SPEED = 20
         self.GAME_OVER = False
+        self.score = 0 
         self.w = width
         self.h = height
 
@@ -42,6 +43,7 @@ class Game:
         self.board_w = int(self.w/BLOCK_SIZE)
 
         self.descend_clock = 0
+        self.speed_clock = 0
         self.is_descending = False
         
         self.placed_blocks = {}
@@ -56,13 +58,19 @@ class Game:
 
         self.clock.tick(CLOCK_SPEED)
         self.descend_clock += 1
+        self.speed_clock += 1
+
 
         self._render()
         self._handle_events()
         
-        if self.is_descending or (self.descend_clock % 20 == 0):
+        if self.is_descending or (self.descend_clock % self.BLOCK_SPEED == 0):
             self.descend_clock = 0
             self._move(0,1,0)
+
+        if self.BLOCK_SPEED > 5 and self.speed_clock % 1000 == 0:
+            self.speed_clock = 0
+            self.BLOCK_SPEED -= 1
 
         return self.GAME_OVER
 
@@ -79,8 +87,8 @@ class Game:
                 pygame.draw.rect(self.window, COLOR_RED,(point.x, point.y, BLOCK_SIZE, BLOCK_SIZE))
                 pygame.draw.rect(self.window, COLOR_GREEN,(point.x+3, point.y+3, BLOCK_SIZE-6, BLOCK_SIZE-6))
 
-        # text = font.render("Score: " + str(0), True, (255,255,255))
-        # self.window.blit(text, [0, 0])
+        text = font.render("Score: " + str(self.score), True, (255,255,255))
+        self.window.blit(text, [0, 0])
         
         pygame.display.update()
 
@@ -173,6 +181,9 @@ class Game:
         for i in range(self.board_h):
             if len(self.placed_blocks[i]) >= self.board_w:
                 ind.append(i)
+
+        multiplyer = len(ind)
+        self.score += 100*multiplyer * multiplyer
 
         for i in ind:
             for j in range(i,0,-1):
